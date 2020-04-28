@@ -47,9 +47,13 @@
 			this.linkLabel4 = new System.Windows.Forms.LinkLabel();
 			this.linkLabel5 = new System.Windows.Forms.LinkLabel();
 			this.OkBtn = new System.Windows.Forms.Button();
+			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+			this.label8 = new System.Windows.Forms.Label();
+			this.linkLabel6 = new System.Windows.Forms.LinkLabel();
 			this.tableLayoutPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
+			this.flowLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel
@@ -61,11 +65,13 @@
 			this.tableLayoutPanel.Controls.Add(this.labelProductName, 1, 0);
 			this.tableLayoutPanel.Controls.Add(this.labelVersion, 1, 1);
 			this.tableLayoutPanel.Controls.Add(this.labelCopyright, 1, 2);
-			this.tableLayoutPanel.Controls.Add(this.tableLayoutPanel1, 1, 3);
+			this.tableLayoutPanel.Controls.Add(this.tableLayoutPanel1, 1, 4);
+			this.tableLayoutPanel.Controls.Add(this.flowLayoutPanel1, 1, 3);
 			this.tableLayoutPanel.Location = new System.Drawing.Point(5, 7);
 			this.tableLayoutPanel.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
 			this.tableLayoutPanel.Name = "tableLayoutPanel";
-			this.tableLayoutPanel.RowCount = 4;
+			this.tableLayoutPanel.RowCount = 5;
+			this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
@@ -80,7 +86,7 @@
 			this.logoPictureBox.Location = new System.Drawing.Point(6, 7);
 			this.logoPictureBox.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
 			this.logoPictureBox.Name = "logoPictureBox";
-			this.tableLayoutPanel.SetRowSpan(this.logoPictureBox, 4);
+			this.tableLayoutPanel.SetRowSpan(this.logoPictureBox, 5);
 			this.logoPictureBox.Size = new System.Drawing.Size(244, 233);
 			this.logoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.logoPictureBox.TabIndex = 12;
@@ -90,11 +96,11 @@
 			// 
 			this.labelProductName.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.labelProductName.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.labelProductName.Location = new System.Drawing.Point(268, 0);
-			this.labelProductName.Margin = new System.Windows.Forms.Padding(12, 0, 6, 0);
+			this.labelProductName.Location = new System.Drawing.Point(262, 0);
+			this.labelProductName.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
 			this.labelProductName.MaximumSize = new System.Drawing.Size(0, 40);
 			this.labelProductName.Name = "labelProductName";
-			this.labelProductName.Size = new System.Drawing.Size(539, 24);
+			this.labelProductName.Size = new System.Drawing.Size(545, 24);
 			this.labelProductName.TabIndex = 19;
 			this.labelProductName.Text = "Product Name:";
 			this.labelProductName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -103,11 +109,11 @@
 			// 
 			this.labelVersion.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.labelVersion.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.labelVersion.Location = new System.Drawing.Point(268, 24);
-			this.labelVersion.Margin = new System.Windows.Forms.Padding(12, 0, 6, 0);
+			this.labelVersion.Location = new System.Drawing.Point(262, 24);
+			this.labelVersion.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
 			this.labelVersion.MaximumSize = new System.Drawing.Size(0, 40);
 			this.labelVersion.Name = "labelVersion";
-			this.labelVersion.Size = new System.Drawing.Size(539, 24);
+			this.labelVersion.Size = new System.Drawing.Size(545, 24);
 			this.labelVersion.TabIndex = 0;
 			this.labelVersion.Text = "Version:";
 			this.labelVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -116,11 +122,11 @@
 			// 
 			this.labelCopyright.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.labelCopyright.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.labelCopyright.Location = new System.Drawing.Point(268, 48);
-			this.labelCopyright.Margin = new System.Windows.Forms.Padding(12, 0, 6, 0);
+			this.labelCopyright.Location = new System.Drawing.Point(262, 48);
+			this.labelCopyright.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
 			this.labelCopyright.MaximumSize = new System.Drawing.Size(0, 40);
 			this.labelCopyright.Name = "labelCopyright";
-			this.labelCopyright.Size = new System.Drawing.Size(539, 24);
+			this.labelCopyright.Size = new System.Drawing.Size(545, 24);
 			this.labelCopyright.TabIndex = 21;
 			this.labelCopyright.Text = "Author:";
 			this.labelCopyright.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -143,7 +149,7 @@
 			this.tableLayoutPanel1.Controls.Add(this.linkLabel4, 1, 5);
 			this.tableLayoutPanel1.Controls.Add(this.linkLabel5, 1, 6);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(259, 75);
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(259, 99);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 7;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
@@ -153,7 +159,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(551, 169);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(551, 145);
 			this.tableLayoutPanel1.TabIndex = 25;
 			// 
 			// label1
@@ -230,7 +236,7 @@
 			this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.label7.Location = new System.Drawing.Point(3, 144);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(182, 25);
+			this.label7.Size = new System.Drawing.Size(182, 24);
 			this.label7.TabIndex = 6;
 			this.label7.Text = "Fancybox";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -299,7 +305,7 @@
 			this.linkLabel5.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.linkLabel5.Location = new System.Drawing.Point(191, 144);
 			this.linkLabel5.Name = "linkLabel5";
-			this.linkLabel5.Size = new System.Drawing.Size(360, 25);
+			this.linkLabel5.Size = new System.Drawing.Size(360, 24);
 			this.linkLabel5.TabIndex = 11;
 			this.linkLabel5.TabStop = true;
 			this.linkLabel5.Text = "https://fancyapps.com/fancybox/3/";
@@ -316,11 +322,43 @@
 			this.OkBtn.Text = "Close";
 			this.OkBtn.UseVisualStyleBackColor = true;
 			// 
+			// flowLayoutPanel1
+			// 
+			this.flowLayoutPanel1.Controls.Add(this.label8);
+			this.flowLayoutPanel1.Controls.Add(this.linkLabel6);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(259, 72);
+			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(548, 24);
+			this.flowLayoutPanel1.TabIndex = 26;
+			// 
+			// label8
+			// 
+			this.label8.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
+			this.label8.Location = new System.Drawing.Point(3, 0);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(185, 24);
+			this.label8.TabIndex = 0;
+			this.label8.Text = "Project website:";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// linkLabel6
+			// 
+			this.linkLabel6.Font = new System.Drawing.Font("Segoe UI", 6.75F);
+			this.linkLabel6.Location = new System.Drawing.Point(194, 0);
+			this.linkLabel6.Name = "linkLabel6";
+			this.linkLabel6.Size = new System.Drawing.Size(333, 24);
+			this.linkLabel6.TabIndex = 1;
+			this.linkLabel6.TabStop = true;
+			this.linkLabel6.Text = "https://github.com/YuriMyakotin/PhotoAlbumMaker";
+			this.linkLabel6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.linkLabel6.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkClicked);
+			// 
 			// AboutWindow
 			// 
 			this.AcceptButton = this.OkBtn;
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(822, 294);
+			this.ClientSize = new System.Drawing.Size(822, 307);
 			this.ControlBox = false;
 			this.Controls.Add(this.tableLayoutPanel);
 			this.Controls.Add(this.OkBtn);
@@ -339,6 +377,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
+			this.flowLayoutPanel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -364,5 +403,8 @@
 		private System.Windows.Forms.LinkLabel linkLabel4;
 		private System.Windows.Forms.LinkLabel linkLabel5;
 		private System.Windows.Forms.Button OkBtn;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.LinkLabel linkLabel6;
 	}
 }
