@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PhotosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Images">
+    <Key>
+      <PropertyRef Name="ImageID" />
+    </Key>
+    <Property Name="ImageID" Type="int" Nullable="false" />
+    <Property Name="SiteID" Type="int" Nullable="false" />
+    <Property Name="FolderID" Type="int" Nullable="false" />
+    <Property Name="SerialNumber" Type="int" Nullable="false" />
+    <Property Name="ImageName" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="ImageComments" Type="nvarchar(max)" />
+    <Property Name="DateAdded" Type="datetime" Nullable="false" />
+    <Property Name="DateTaken" Type="datetime" />
+    <Property Name="Camera" Type="nvarchar" MaxLength="50" />
+    <Property Name="FocalLenght" Type="float" />
+    <Property Name="Aperture" Type="float" />
+    <Property Name="Exposure" Type="float" />
+    <Property Name="Iso" Type="int" />
+    <Property Name="GPSLatitude" Type="float" />
+    <Property Name="GPSLongtitude" Type="float" />
+    <Property Name="GPSAltitude" Type="float" />
+  </EntityType>
+  <EntityType Name="PhotoFolders">
+    <Key>
+      <PropertyRef Name="FolderID" />
+    </Key>
+    <Property Name="FolderID" Type="int" Nullable="false" />
+    <Property Name="SiteID" Type="int" Nullable="false" />
+    <Property Name="ParentFolderID" Type="int" Nullable="false" />
+    <Property Name="SerialNum" Type="int" Nullable="false" />
+    <Property Name="FolderName" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="FolderDescription" Type="nvarchar(max)" />
+    <Property Name="FolderThumbID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PhotoSites">
+    <Key>
+      <PropertyRef Name="SiteID" />
+    </Key>
+    <Property Name="SiteID" Type="int" Nullable="false" />
+    <Property Name="SiteName" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="SiteDescription" Type="nvarchar" MaxLength="255" />
+    <Property Name="Path" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="ImageSize" Type="int" Nullable="false" />
+    <Property Name="ImageQuality" Type="tinyint" Nullable="false" />
+    <Property Name="ThumbSize" Type="int" Nullable="false" />
+    <Property Name="ThumbQuality" Type="tinyint" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Images_PhotoFolders">
+    <End Role="PhotoFolders" Type="Self.PhotoFolders" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Images" Type="Self.Images" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PhotoFolders">
+        <PropertyRef Name="FolderID" />
+      </Principal>
+      <Dependent Role="Images">
+        <PropertyRef Name="FolderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Images_PhotoSites">
+    <End Role="PhotoSites" Type="Self.PhotoSites" Multiplicity="1" />
+    <End Role="Images" Type="Self.Images" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PhotoSites">
+        <PropertyRef Name="SiteID" />
+      </Principal>
+      <Dependent Role="Images">
+        <PropertyRef Name="SiteID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PhotoFolders_PhotoSites">
+    <End Role="PhotoSites" Type="Self.PhotoSites" Multiplicity="1" />
+    <End Role="PhotoFolders" Type="Self.PhotoFolders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PhotoSites">
+        <PropertyRef Name="SiteID" />
+      </Principal>
+      <Dependent Role="PhotoFolders">
+        <PropertyRef Name="SiteID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PhotosModelStoreContainer">
+    <EntitySet Name="Images" EntityType="Self.Images" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PhotoFolders" EntityType="Self.PhotoFolders" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PhotoSites" EntityType="Self.PhotoSites" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Images_PhotoFolders" Association="Self.FK_Images_PhotoFolders">
+      <End Role="PhotoFolders" EntitySet="PhotoFolders" />
+      <End Role="Images" EntitySet="Images" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Images_PhotoSites" Association="Self.FK_Images_PhotoSites">
+      <End Role="PhotoSites" EntitySet="PhotoSites" />
+      <End Role="Images" EntitySet="Images" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PhotoFolders_PhotoSites" Association="Self.FK_PhotoFolders_PhotoSites">
+      <End Role="PhotoSites" EntitySet="PhotoSites" />
+      <End Role="PhotoFolders" EntitySet="PhotoFolders" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

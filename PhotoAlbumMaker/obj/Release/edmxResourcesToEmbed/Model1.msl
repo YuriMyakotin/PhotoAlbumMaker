@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="PhotosModelStoreContainer" CdmEntityContainer="PhotosEntities">
+    <EntitySetMapping Name="Images">
+      <EntityTypeMapping TypeName="PhotosModel.Images">
+        <MappingFragment StoreEntitySet="Images">
+          <ScalarProperty Name="GPSAltitude" ColumnName="GPSAltitude" />
+          <ScalarProperty Name="GPSLongtitude" ColumnName="GPSLongtitude" />
+          <ScalarProperty Name="GPSLatitude" ColumnName="GPSLatitude" />
+          <ScalarProperty Name="Iso" ColumnName="Iso" />
+          <ScalarProperty Name="Exposure" ColumnName="Exposure" />
+          <ScalarProperty Name="Aperture" ColumnName="Aperture" />
+          <ScalarProperty Name="FocalLenght" ColumnName="FocalLenght" />
+          <ScalarProperty Name="Camera" ColumnName="Camera" />
+          <ScalarProperty Name="DateTaken" ColumnName="DateTaken" />
+          <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
+          <ScalarProperty Name="ImageComments" ColumnName="ImageComments" />
+          <ScalarProperty Name="ImageName" ColumnName="ImageName" />
+          <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+          <ScalarProperty Name="FolderID" ColumnName="FolderID" />
+          <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+          <ScalarProperty Name="ImageID" ColumnName="ImageID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PhotoFolders">
+      <EntityTypeMapping TypeName="PhotosModel.PhotoFolders">
+        <MappingFragment StoreEntitySet="PhotoFolders">
+          <ScalarProperty Name="FolderThumbID" ColumnName="FolderThumbID" />
+          <ScalarProperty Name="FolderDescription" ColumnName="FolderDescription" />
+          <ScalarProperty Name="FolderName" ColumnName="FolderName" />
+          <ScalarProperty Name="SerialNum" ColumnName="SerialNum" />
+          <ScalarProperty Name="ParentFolderID" ColumnName="ParentFolderID" />
+          <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+          <ScalarProperty Name="FolderID" ColumnName="FolderID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PhotoSites">
+      <EntityTypeMapping TypeName="PhotosModel.PhotoSites">
+        <MappingFragment StoreEntitySet="PhotoSites">
+          <ScalarProperty Name="ThumbQuality" ColumnName="ThumbQuality" />
+          <ScalarProperty Name="ThumbSize" ColumnName="ThumbSize" />
+          <ScalarProperty Name="ImageQuality" ColumnName="ImageQuality" />
+          <ScalarProperty Name="ImageSize" ColumnName="ImageSize" />
+          <ScalarProperty Name="Path" ColumnName="Path" />
+          <ScalarProperty Name="SiteDescription" ColumnName="SiteDescription" />
+          <ScalarProperty Name="SiteName" ColumnName="SiteName" />
+          <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

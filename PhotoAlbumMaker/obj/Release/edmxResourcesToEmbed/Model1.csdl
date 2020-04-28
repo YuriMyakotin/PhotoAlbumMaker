@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PhotosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="PhotosEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Images" EntityType="PhotosModel.Images" />
+    <EntitySet Name="PhotoFolders" EntityType="PhotosModel.PhotoFolders" />
+    <EntitySet Name="PhotoSites" EntityType="PhotosModel.PhotoSites" />
+    <AssociationSet Name="FK_Images_PhotoFolders" Association="PhotosModel.FK_Images_PhotoFolders">
+      <End Role="PhotoFolders" EntitySet="PhotoFolders" />
+      <End Role="Images" EntitySet="Images" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Images_PhotoSites" Association="PhotosModel.FK_Images_PhotoSites">
+      <End Role="PhotoSites" EntitySet="PhotoSites" />
+      <End Role="Images" EntitySet="Images" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PhotoFolders_PhotoSites" Association="PhotosModel.FK_PhotoFolders_PhotoSites">
+      <End Role="PhotoSites" EntitySet="PhotoSites" />
+      <End Role="PhotoFolders" EntitySet="PhotoFolders" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Images">
+    <Key>
+      <PropertyRef Name="ImageID" />
+    </Key>
+    <Property Name="ImageID" Type="Int32" Nullable="false" />
+    <Property Name="SiteID" Type="Int32" Nullable="false" />
+    <Property Name="FolderID" Type="Int32" Nullable="false" />
+    <Property Name="SerialNumber" Type="Int32" Nullable="false" />
+    <Property Name="ImageName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="ImageComments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="DateAdded" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DateTaken" Type="DateTime" Precision="3" />
+    <Property Name="Camera" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FocalLenght" Type="Double" />
+    <Property Name="Aperture" Type="Double" />
+    <Property Name="Exposure" Type="Double" />
+    <Property Name="Iso" Type="Int32" />
+    <Property Name="GPSLatitude" Type="Double" />
+    <Property Name="GPSLongtitude" Type="Double" />
+    <Property Name="GPSAltitude" Type="Double" />
+    <NavigationProperty Name="PhotoFolders" Relationship="PhotosModel.FK_Images_PhotoFolders" FromRole="Images" ToRole="PhotoFolders" />
+    <NavigationProperty Name="PhotoSites" Relationship="PhotosModel.FK_Images_PhotoSites" FromRole="Images" ToRole="PhotoSites" />
+  </EntityType>
+  <EntityType Name="PhotoFolders">
+    <Key>
+      <PropertyRef Name="FolderID" />
+    </Key>
+    <Property Name="FolderID" Type="Int32" Nullable="false" />
+    <Property Name="SiteID" Type="Int32" Nullable="false" />
+    <Property Name="ParentFolderID" Type="Int32" Nullable="false" />
+    <Property Name="SerialNum" Type="Int32" Nullable="false" />
+    <Property Name="FolderName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="FolderDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="FolderThumbID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Images" Relationship="PhotosModel.FK_Images_PhotoFolders" FromRole="PhotoFolders" ToRole="Images" />
+    <NavigationProperty Name="PhotoSites" Relationship="PhotosModel.FK_PhotoFolders_PhotoSites" FromRole="PhotoFolders" ToRole="PhotoSites" />
+  </EntityType>
+  <EntityType Name="PhotoSites">
+    <Key>
+      <PropertyRef Name="SiteID" />
+    </Key>
+    <Property Name="SiteID" Type="Int32" Nullable="false" />
+    <Property Name="SiteName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="SiteDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Path" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="ImageSize" Type="Int32" Nullable="false" />
+    <Property Name="ImageQuality" Type="Byte" Nullable="false" />
+    <Property Name="ThumbSize" Type="Int32" Nullable="false" />
+    <Property Name="ThumbQuality" Type="Byte" Nullable="false" />
+    <NavigationProperty Name="Images" Relationship="PhotosModel.FK_Images_PhotoSites" FromRole="PhotoSites" ToRole="Images" />
+    <NavigationProperty Name="PhotoFolders" Relationship="PhotosModel.FK_PhotoFolders_PhotoSites" FromRole="PhotoSites" ToRole="PhotoFolders" />
+  </EntityType>
+  <Association Name="FK_Images_PhotoFolders">
+    <End Type="PhotosModel.PhotoFolders" Role="PhotoFolders" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="PhotosModel.Images" Role="Images" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PhotoFolders">
+        <PropertyRef Name="FolderID" />
+      </Principal>
+      <Dependent Role="Images">
+        <PropertyRef Name="FolderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Images_PhotoSites">
+    <End Type="PhotosModel.PhotoSites" Role="PhotoSites" Multiplicity="1" />
+    <End Type="PhotosModel.Images" Role="Images" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PhotoSites">
+        <PropertyRef Name="SiteID" />
+      </Principal>
+      <Dependent Role="Images">
+        <PropertyRef Name="SiteID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PhotoFolders_PhotoSites">
+    <End Type="PhotosModel.PhotoSites" Role="PhotoSites" Multiplicity="1" />
+    <End Type="PhotosModel.PhotoFolders" Role="PhotoFolders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PhotoSites">
+        <PropertyRef Name="SiteID" />
+      </Principal>
+      <Dependent Role="PhotoFolders">
+        <PropertyRef Name="SiteID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
