@@ -5,7 +5,7 @@ Simple, but powerful editor and web engine for creating web photo/video albums.
 
 <b>3rd party components used:</b> Newtonsoft.JSON and MetaDataExtractor
 
-<b>Website requirements:</b> any operating system, any web server. 
+<b>Website requirements:</b> created site have only static content, so can use any operating system/any web server. 
 
 <b>3rd party javascripts libraries used:</b> Jquery, Masonry, Fancybox.
 
