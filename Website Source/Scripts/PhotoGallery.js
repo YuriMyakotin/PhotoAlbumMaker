@@ -66,6 +66,9 @@ function LoadAlbum(FolderID) {
 	if (DescText.length > 0) window.FolderDesc.style.display = "block";
 	else window.FolderDesc.style.display = "none";
 	LoadSubfolders();
+	$(document).bind("contextmenu", function (e) {
+		e.preventDefault();
+	});
 }
 
 
@@ -183,18 +186,10 @@ function LoadSubfolders() {
 			$("#ImgLst").append(AImg);
 			var InfoStr = "<br/><div>";
 			if (IM.C != null) InfoStr += "<span class=\"cmnt\">" + IM.C + "</span><br />";
-			InfoStr+="<a class=\"OrigImgLink\" href=\"" +
-				CurrentFolderID.toString() + "/" + IM.N + "\" target=\"_blank\" title=\"Original image\">"+IM.N +"</a><br />";
-			InfoStr += IM.E + "<br />";
-			if (IM.G != null)
-				InfoStr += "Geotag: <a href=\"https://www.google.com/maps/dir//" +
-					IM.G +
-					"/@" +
-					IM.G +
-					",18z\" target=\"_blank\">" +
-					IM.G +
-					"</a>";
-			else InfoStr += "&nbsp;";
+			InfoStr +="<a class=\"OrigImgLink\" href=\"#\" title=\"Original image\" onclick=\"ShowOriginalImage(" +
+				CurrentFolderID + ",'" + IM.N +"');return false;\">"+IM.N +"</a><br />";
+			InfoStr += ExifInfoToStr(IM)+"<br />"+GPSInfoToStr(IM);
+
 
 			InfoStr += "<br /></div>";
 			$("#appendContent").append(InfoStr);
@@ -209,15 +204,79 @@ function LoadSubfolders() {
 				var toolbar = "<div id='tools'>" + $("#appendContent div").eq(this.index).html() + "</div>";
 				$(".fancybox-title").append(toolbar);
 			},
-
+			onActivate: function() {
+				var toolbar = "<div id='tools'>" + $("#appendContent div").eq(this.index).html() + "</div>";
+				$(".fancybox-title").append(toolbar);
+			},
 			caption: function(instance, item) { return "<div class=\"fancybox-title\"></div>"; },
 			loop: true,
 			animationEffect: false,
 			transitionEffect: false,
-			protection: true,
+			protect: true,
 			image: { preload: true },
 			buttons: ["slideShow", "thumbs", "close"]
 		});
 	}
+
+}
+
+function ShowOriginalImage(FolderID, ImageName) {
+	$.fancybox.open({
+		src: '/' + FolderID.toString() + '/' + ImageName,
+		type: 'image',
+		buttons: ["zoom", "close"],
+		opts: {
+			closeExisting: false, preload: false, buttons: ["zoom", "close"],
+			protect: true,
+			animationEffect: false,
+			afterShow: function () { $('.fancybox-button--zoom').click(); }
+		}
+
+	});
+}
+
+
+
+function ConvertDEGToDMS(degstr, lat) {
+	var deg = parseFloat(degstr);
+	var absolute = Math.abs(deg);
+
+	var degrees = Math.floor(absolute);
+	var minutesNotTruncated = (absolute - degrees) * 60;
+	var minutes = Math.floor(minutesNotTruncated);
+	var seconds = ((minutesNotTruncated - minutes) * 60).toFixed(2);
+
+	if (lat) {
+		var direction = deg >= 0 ? "N" : "S";
+	} else {
+		var direction = deg >= 0 ? "E" : "W";
+	}
+
+	return degrees + "°" + minutes + "'" + seconds + "\"" + direction;
+}
+
+function ExifInfoToStr(IM) {
+	var retval = "";
+	if (IM.D != null) retval += IM.D + "&nbsp; ";
+	if (IM.Cn != null) retval += IM.Cn + "&nbsp; ";
+	if (IM.F != null) retval += IM.F + "mm&nbsp; ";
+	if (IM.I != null) retval += "ISO:" + IM.I + "&nbsp; ";
+	if (IM.E != null) retval += IM.E + "s&nbsp; ";
+	if (IM.A != null) retval += "f/" + IM.A + "&nbsp; ";
+	return retval;
+
+}
+
+function GPSInfoToStr(IM) {
+
+	var retval = "";
+	if ((IM.La != null) && (IM.Lo != null))
+	{
+		var gmapscoords=IM.La + ","+IM.Lo;
+		var textcoords = ConvertDEGToDMS(IM.La, true) + ",&nbsp;" + ConvertDEGToDMS(IM.Lo, false);
+		if (IM.Al != null) textcoords += ",&nbsp" + IM.Al;
+		retval = "<a href=\"https://www.google.com/maps/dir//" + gmapscoords + "/@" + gmapscoords+",18z\" target=\"_blank\">"+textcoords+"</a>";
+	}
+	return retval;
 
 }
