@@ -10,8 +10,10 @@ using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ExifLib;
+using MetadataExtractor;
+using MetadataExtractor.Formats.Exif;
 using Newtonsoft.Json;
+using Directory = System.IO.Directory;
 
 namespace PhotoAlbumMaker
 {
@@ -25,12 +27,14 @@ namespace PhotoAlbumMaker
 
 		private int SelectedFolderID;
 		private FolderInfo SelectedFolder;
-		private static readonly Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+		private static readonly Configuration config =
+			ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
 		private static string ExposureToStr(double Exposure) =>
 			Exposure > 0.5
 				? Exposure.ToString(CultureInfo.InvariantCulture)
-				: "1/" + (1 / Exposure).ToString(CultureInfo.InvariantCulture);
+				: "1/" + Math.Round(1 / Exposure).ToString(CultureInfo.InvariantCulture);
 
 		public MainForm()
 		{
@@ -39,7 +43,7 @@ namespace PhotoAlbumMaker
 			int SizeX = ReadCfgInt("SizeX", 0);
 			int SizeY = ReadCfgInt("SizeY", 0);
 			bool isMax = (ReadCfgString("Maximized") == "true");
-			if ((SizeX!=0)&&(SizeY!=0)) Size=new Size(SizeX,SizeY);
+			if ((SizeX != 0) && (SizeY != 0)) Size = new Size(SizeX, SizeY);
 			if (isMax) WindowState = FormWindowState.Maximized;
 
 			SizeX = ReadCfgInt("FoldersWindowWidth", 0);
@@ -48,6 +52,7 @@ namespace PhotoAlbumMaker
 			{
 				splitContainer1.SplitterDistance = SizeX;
 			}
+
 			if (SizeY != 0) splitContainer2.SplitterDistance = SizeY;
 
 			LoadComplete = true;
@@ -60,7 +65,11 @@ namespace PhotoAlbumMaker
 			{
 				retval = config.AppSettings.Settings[CfgName].Value;
 			}
-			catch { };
+			catch
+			{
+			}
+
+			;
 			return retval;
 		}
 
@@ -69,9 +78,12 @@ namespace PhotoAlbumMaker
 			int retval = DefaultValue;
 			try
 			{
-				retval=int.Parse(config.AppSettings.Settings[CfgName].Value);
+				retval = int.Parse(config.AppSettings.Settings[CfgName].Value);
 			}
-			catch{}
+			catch
+			{
+			}
+
 			return retval;
 		}
 
@@ -112,7 +124,8 @@ namespace PhotoAlbumMaker
 					MessageBox.Show(Ex.Message, "Error loading album data", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				}
-				SaveCfgData("LastSitePath",PhotoAlbumPath);
+
+				SaveCfgData("LastSitePath", PhotoAlbumPath);
 
 			}
 
@@ -125,7 +138,8 @@ namespace PhotoAlbumMaker
 		{
 			MaxFolderID = 0;
 			for (int i = 0; i < _photoAlbumInfo.F.Count; i++)
-				if (_photoAlbumInfo.F[i].I > MaxFolderID) MaxFolderID = _photoAlbumInfo.F[i].I;
+				if (_photoAlbumInfo.F[i].I > MaxFolderID)
+					MaxFolderID = _photoAlbumInfo.F[i].I;
 		}
 
 		private void MainFormLoad(object sender, EventArgs e)
@@ -139,7 +153,7 @@ namespace PhotoAlbumMaker
 			VideosMenuItem.Enabled = false;
 
 			PhotoAlbumPath = ReadCfgString("LastSitePath");
-			if (PhotoAlbumPath.Length>0) LoadPhotoAlbum();
+			if (PhotoAlbumPath.Length > 0) LoadPhotoAlbum();
 
 
 		}
@@ -187,6 +201,7 @@ namespace PhotoAlbumMaker
 				if (encoders[j].MimeType == mimeType)
 					return encoders[j];
 			}
+
 			return null;
 		}
 
@@ -201,22 +216,23 @@ namespace PhotoAlbumMaker
 			ImagesList.Visible = false;
 
 
-				List<ImageInfo> ImgList = SelectedFolder.Im;
-				toolStripProgressBar1.Value = 0;
-				int TotalImages = ImgList.Count;
-				toolStripProgressBar1.Maximum = TotalImages;
+			List<ImageInfo> ImgList = SelectedFolder.Im;
+			toolStripProgressBar1.Value = 0;
+			int TotalImages = ImgList.Count;
+			toolStripProgressBar1.Maximum = TotalImages;
 
-				foreach (ImageInfo Img in ImgList)
-				{
-					toolStripStatusLabel2.Text = ProcessedImages.ToString() + "/" + TotalImages.ToString();
-					using (Bitmap Thumb = new Bitmap(PhotoAlbumPath +"\\"+ SelectedFolderID.ToString() + "\\thumbs\\" + Img.N))
-						imageList1.Images.Add(Img.N,Thumb);
+			foreach (ImageInfo Img in ImgList)
+			{
+				toolStripStatusLabel2.Text = ProcessedImages.ToString() + "/" + TotalImages.ToString();
+				using (Bitmap Thumb =
+					new Bitmap(PhotoAlbumPath + "\\" + SelectedFolderID.ToString() + "\\thumbs\\" + Img.N))
+					imageList1.Images.Add(Img.N, Thumb);
 
-					ImagesListViewItem LI = new ImagesListViewItem(Img);
-					this.ImagesList.Items.Add(LI);
-					++ProcessedImages;
-					++(toolStripProgressBar1.Value);
-				}
+				ImagesListViewItem LI = new ImagesListViewItem(Img);
+				this.ImagesList.Items.Add(LI);
+				++ProcessedImages;
+				++(toolStripProgressBar1.Value);
+			}
 
 
 			ImagesList.Visible = true;
@@ -240,6 +256,7 @@ namespace PhotoAlbumMaker
 					VideoListViewItem VI = new VideoListViewItem(V);
 					VideosList.Items.Add(VI);
 				}
+
 				VideosList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
 			}
 			else VideosList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
@@ -262,8 +279,8 @@ namespace PhotoAlbumMaker
 			System.Drawing.Imaging.Encoder myEncoder = System.Drawing.Imaging.Encoder.Quality;
 			ImageCodecInfo myImageCodecInfo = GetEncoderInfo("image/jpeg");
 
-			EncoderParameter SlideEncParameter = new EncoderParameter(myEncoder, (long)_photoAlbumInfo.IQ);
-			EncoderParameter ThumbEncParameter = new EncoderParameter(myEncoder, (long)_photoAlbumInfo.TQ);
+			EncoderParameter SlideEncParameter = new EncoderParameter(myEncoder, (long) _photoAlbumInfo.IQ);
+			EncoderParameter ThumbEncParameter = new EncoderParameter(myEncoder, (long) _photoAlbumInfo.TQ);
 
 
 			EncoderParameters SlideEncoderParameters = new EncoderParameters(1) {Param = {[0] = SlideEncParameter}};
@@ -289,218 +306,113 @@ namespace PhotoAlbumMaker
 				string SlideFileName, ThumbFileName;
 
 				List<ImageInfo> ExistingItems = SelectedFolder.Im.Where(p => p.N == ShortName).ToList();
-					if (ExistingItems.Count != 0)
+				if (ExistingItems.Count != 0)
+				{
+					if (Replace == DialogResult.Abort) continue;
+					if (Replace != DialogResult.OK)
 					{
-						if (Replace == DialogResult.Abort) continue;
-						if (Replace != DialogResult.OK)
+						using (ReplaceFileDialog rfd = new ReplaceFileDialog())
 						{
-							using (ReplaceFileDialog rfd = new ReplaceFileDialog())
-							{
-								rfd.label1.Text = Path.GetFileName(file) + " already exists, replace?";
-								Replace = rfd.ShowDialog();
+							rfd.label1.Text = Path.GetFileName(file) + " already exists, replace?";
+							Replace = rfd.ShowDialog();
 
-								if ((Replace == DialogResult.Abort) || (Replace == DialogResult.No)) continue;
-							}
-						}
-
-						// delete existing item
-						ImagesList.Items.RemoveByKey(ShortName);
-						imageList1.Images.RemoveByKey(ShortName);
-						File.Delete(PhotoAlbumPath + "\\" + SelectedFolderID.ToString() + "\\" + ShortName);
-						File.Delete(PhotoAlbumPath + "\\" + SelectedFolderID.ToString() + "\\slides\\" + ShortName);
-						File.Delete(PhotoAlbumPath + "\\" + SelectedFolderID.ToString() + "\\thumbs\\" + ShortName);
-
-						SelectedFolder.Im.Remove(ExistingItems.First());
-
-						isReplaced = true;
-					}
-
-					Bitmap OriginalImage = new Bitmap(file);
-					SizeX = OriginalImage.Width;
-					SizeY = OriginalImage.Height;
-
-					if (SizeX > SizeY)
-					{
-						ResizeRate = (double)_photoAlbumInfo.IS / SizeX;
-						NewSizeX = _photoAlbumInfo.IS;
-						NewSizeY = (int)(SizeY * ResizeRate);
-					}
-					else
-					{
-						ResizeRate = (double)_photoAlbumInfo.IS / SizeY;
-						NewSizeY = _photoAlbumInfo.IS;
-						NewSizeX = (int)(SizeX * ResizeRate);
-					}
-
-					Bitmap SlideImage = new Bitmap(NewSizeX, NewSizeY);
-					Graphics g = Graphics.FromImage(SlideImage);
-					g.CompositingQuality = CompositingQuality.HighQuality;
-					g.SmoothingMode = SmoothingMode.HighQuality;
-					g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-					g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-					Rectangle rect = new Rectangle(0, 0, NewSizeX, NewSizeY);
-					g.DrawImage(OriginalImage, rect);
-
-					SlideFileName = PhotoAlbumPath + "\\" + SelectedFolderID.ToString() + "\\slides\\" + ShortName;
-					SlideImage.Save(SlideFileName, myImageCodecInfo, SlideEncoderParameters);
-
-
-					if (SizeX < SizeY)
-					{
-						ResizeRate = (double)_photoAlbumInfo.TS / SizeX;
-						NewSizeX = _photoAlbumInfo.TS;
-						NewSizeY = (int)(SizeY * ResizeRate);
-					}
-					else
-					{
-						ResizeRate = (double)_photoAlbumInfo.TS / SizeY;
-						NewSizeY = _photoAlbumInfo.TS;
-						NewSizeX = (int)(SizeX * ResizeRate);
-					}
-
-					g.Dispose();
-
-					Bitmap TmpImage = new Bitmap(NewSizeX, NewSizeY);
-					g = Graphics.FromImage(TmpImage);
-					g.CompositingQuality = CompositingQuality.HighQuality;
-					g.SmoothingMode = SmoothingMode.HighQuality;
-					g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-					g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-					rect = new Rectangle(0, 0, NewSizeX, NewSizeY);
-					g.DrawImage(OriginalImage, rect);
-
-					rect = new Rectangle((NewSizeX - _photoAlbumInfo.TS) / 2, (NewSizeY - _photoAlbumInfo.TS) / 2, _photoAlbumInfo.TS, _photoAlbumInfo.TS);
-					Bitmap ThumbImage = TmpImage.Clone(rect, TmpImage.PixelFormat);
-
-					ThumbFileName = PhotoAlbumPath + "\\" + SelectedFolderID.ToString() + "\\thumbs\\" + ShortName;
-					ThumbImage.Save(ThumbFileName, myImageCodecInfo, ThumbEncoderParameters);
-					SlideImage.Dispose();
-					TmpImage.Dispose();
-					g.Dispose();
-					OriginalImage.Dispose();
-
-					ImageInfo NewImageData = new ImageInfo {N = ShortName,E = string.Empty,G=string.Empty,C=string.Empty};
-
-					try
-					{
-						bool firstItem = true;
-						using (ExifReader reader = new ExifReader(file))
-						{
-								DateTime dt;
-								double? d;
-								ushort i;
-								string S, S1;
-
-								try
-								{
-									reader.GetTagValue<DateTime>(ExifTags.DateTime, out dt);
-									if (dt.Year >= 1970)
-									{
-										NewImageData.E = dt.ToString(CultureInfo.InvariantCulture);
-										firstItem = false;
-									}
-								}
-								catch { }
-								try
-								{
-									reader.GetTagValue<string>(ExifTags.Make, out S);
-									reader.GetTagValue<string>(ExifTags.Model, out S1);
-									string Camera = S.Trim() + " " + S1.Trim();
-									if (Camera.Length > 0)
-									{
-										if (!firstItem) NewImageData.E += "; ";
-										NewImageData.E += "Camera: "+ Camera;
-
-										firstItem = false;
-									}
-								}
-								catch { }
-
-								try
-								{
-									reader.GetTagValue<double?>(ExifTags.ExposureTime, out d);
-									if (d.HasValue)
-									{
-										if (!firstItem) NewImageData.E += "; ";
-										NewImageData.E += "Exposure time: " + ExposureToStr(d.Value);
-										firstItem = false;
-									}
-								}
-								catch { }
-
-								try
-								{
-									reader.GetTagValue<ushort>(ExifTags.PhotographicSensitivity, out i);
-									if (i != 0)
-									{
-										if (!firstItem) NewImageData.E += "; ";
-										NewImageData.E += "ISO: " + i.ToString();
-										firstItem = false;
-									}
-								}
-								catch { }
-
-
-								try
-								{
-
-									reader.GetTagValue<Double?>(ExifTags.FNumber, out d);
-									if (d.HasValue)
-									{
-
-										if (!firstItem) NewImageData.E += "; ";
-										NewImageData.E += "Aperture: " + Math.Round((decimal)d.Value, 2).ToString(CultureInfo.InvariantCulture);
-										firstItem = false;
-									}
-								}
-								catch { }
-
-								try
-								{
-									reader.GetTagValue<Double?>(ExifTags.FocalLength, out d);
-									if (!firstItem) NewImageData.E += "; ";
-									NewImageData.E += "Focal length: " + d.ToString();
-								}
-								catch { }
-
-
-
-
-
-								try
-								{
-									reader.GetTagValue(ExifTags.GPSLatitude, out double[] latitudeDMS);
-
-									reader.GetTagValue(ExifTags.GPSLongitude, out double[] longitudeDMS);
-
-									reader.GetTagValue(ExifTags.GPSLatitudeRef, out string latitudeRef);
-
-									reader.GetTagValue(ExifTags.GPSLongitudeRef, out string longitudeRef);
-
-									// Lat/long are stored as D°M'S" arrays, so you will need to reconstruct their values as below:
-									double GPSLatitude = (latitudeRef == "N" ? 1 : -1) *
-													(latitudeDMS[0] + latitudeDMS[1] / 60 + latitudeDMS[2] / 3600);
-
-									double GPSLongtitude = (longitudeRef == "E" ? 1 : -1) *
-													(longitudeDMS[0] + longitudeDMS[1] / 60 + longitudeDMS[2] / 3600);
-
-									NewImageData.G = GPSLatitude.ToString(CultureInfo.InvariantCulture).Replace(',', '.') + "," + GPSLongtitude.ToString(CultureInfo.InvariantCulture).Replace(',', '.');
-								}
-								catch { }
-
+							if ((Replace == DialogResult.Abort) || (Replace == DialogResult.No)) continue;
 						}
 					}
-					catch { };
 
-					SelectedFolder.Im.Add(NewImageData);
-					imageList1.Images.Add(NewImageData.N, ThumbImage);
-					ThumbImage.Dispose();
-					ImagesListViewItem LI = new ImagesListViewItem(NewImageData);
-					ImagesList.Items.Add(LI);
-					File.Copy(file, PhotoAlbumPath + "\\" + SelectedFolderID.ToString() + "\\" + ShortName);
-					++ProcessedImages;
-					++(toolStripProgressBar1.Value);
+					// delete existing item
+					ImagesList.Items.RemoveByKey(ShortName);
+					imageList1.Images.RemoveByKey(ShortName);
+					File.Delete(PhotoAlbumPath + "\\" + SelectedFolderID.ToString() + "\\" + ShortName);
+					File.Delete(PhotoAlbumPath + "\\" + SelectedFolderID.ToString() + "\\slides\\" + ShortName);
+					File.Delete(PhotoAlbumPath + "\\" + SelectedFolderID.ToString() + "\\thumbs\\" + ShortName);
+
+					SelectedFolder.Im.Remove(ExistingItems.First());
+
+					isReplaced = true;
+				}
+
+				Bitmap OriginalImage = new Bitmap(file);
+				SizeX = OriginalImage.Width;
+				SizeY = OriginalImage.Height;
+
+				if (SizeX > SizeY)
+				{
+					ResizeRate = (double) _photoAlbumInfo.IS / SizeX;
+					NewSizeX = _photoAlbumInfo.IS;
+					NewSizeY = (int) (SizeY * ResizeRate);
+				}
+				else
+				{
+					ResizeRate = (double) _photoAlbumInfo.IS / SizeY;
+					NewSizeY = _photoAlbumInfo.IS;
+					NewSizeX = (int) (SizeX * ResizeRate);
+				}
+
+				Bitmap SlideImage = new Bitmap(NewSizeX, NewSizeY);
+				Graphics g = Graphics.FromImage(SlideImage);
+				g.CompositingQuality = CompositingQuality.HighQuality;
+				g.SmoothingMode = SmoothingMode.HighQuality;
+				g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+				g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+				Rectangle rect = new Rectangle(0, 0, NewSizeX, NewSizeY);
+				g.DrawImage(OriginalImage, rect);
+
+				SlideFileName = PhotoAlbumPath + "\\" + SelectedFolderID.ToString() + "\\slides\\" + ShortName;
+				SlideImage.Save(SlideFileName, myImageCodecInfo, SlideEncoderParameters);
+
+
+				if (SizeX < SizeY)
+				{
+					ResizeRate = (double) _photoAlbumInfo.TS / SizeX;
+					NewSizeX = _photoAlbumInfo.TS;
+					NewSizeY = (int) (SizeY * ResizeRate);
+				}
+				else
+				{
+					ResizeRate = (double) _photoAlbumInfo.TS / SizeY;
+					NewSizeY = _photoAlbumInfo.TS;
+					NewSizeX = (int) (SizeX * ResizeRate);
+				}
+
+				g.Dispose();
+
+				Bitmap TmpImage = new Bitmap(NewSizeX, NewSizeY);
+				g = Graphics.FromImage(TmpImage);
+				g.CompositingQuality = CompositingQuality.HighQuality;
+				g.SmoothingMode = SmoothingMode.HighQuality;
+				g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+				g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+				rect = new Rectangle(0, 0, NewSizeX, NewSizeY);
+				g.DrawImage(OriginalImage, rect);
+
+				rect = new Rectangle((NewSizeX - _photoAlbumInfo.TS) / 2, (NewSizeY - _photoAlbumInfo.TS) / 2,
+					_photoAlbumInfo.TS, _photoAlbumInfo.TS);
+				Bitmap ThumbImage = TmpImage.Clone(rect, TmpImage.PixelFormat);
+
+				ThumbFileName = PhotoAlbumPath + "\\" + SelectedFolderID.ToString() + "\\thumbs\\" + ShortName;
+				ThumbImage.Save(ThumbFileName, myImageCodecInfo, ThumbEncoderParameters);
+				SlideImage.Dispose();
+				TmpImage.Dispose();
+				g.Dispose();
+				OriginalImage.Dispose();
+
+				ImageInfo NewImageData = new ImageInfo {N = ShortName, C = string.Empty};
+
+				GetExifInfo(ref NewImageData, file);
+
+
+
+				SelectedFolder.Im.Add(NewImageData);
+				imageList1.Images.Add(NewImageData.N, ThumbImage);
+				ThumbImage.Dispose();
+				ImagesListViewItem LI = new ImagesListViewItem(NewImageData);
+				ImagesList.Items.Add(LI);
+				File.Copy(file, PhotoAlbumPath + "\\" + SelectedFolderID.ToString() + "\\" + ShortName);
+				++ProcessedImages;
+				++(toolStripProgressBar1.Value);
 			}
+
 			toolStripStatusLabel2.Text = "";
 			toolStripProgressBar1.Value = 0;
 			FoldersTree.Enabled = true;
@@ -522,7 +434,115 @@ namespace PhotoAlbumMaker
 			SlideEncParameter.Dispose();
 		}
 
+		private void GetExifInfo(ref ImageInfo I, string filename)
+		{
+			try
+			{
 
+				IReadOnlyList<MetadataExtractor.Directory> metadata = ImageMetadataReader.ReadMetadata(filename);
+				ExifSubIfdDirectory ExifInfo = metadata.OfType<ExifSubIfdDirectory>().FirstOrDefault();
+				ExifIfd0Directory ExifInfo1 = metadata.OfType<ExifIfd0Directory>().FirstOrDefault();
+				GpsDirectory GpsInfo = metadata.OfType<GpsDirectory>().FirstOrDefault();
+				DateTime dt;
+				double? d;
+				ushort i;
+				string S, S1;
+				try
+				{
+					dt = ExifInfo1.GetDateTime(ExifDirectoryBase.TagDateTime);
+						I.D = dt.ToString(CultureInfo.InvariantCulture);
+				}
+				catch
+				{
+				}
+
+				try
+				{
+
+					S = ExifInfo1.GetString(ExifDirectoryBase.TagMake);
+					S1 = ExifInfo1.GetString(ExifDirectoryBase.TagModel);
+					I.Cn = S.Trim() + " " + S1.Trim();
+
+				}
+				catch
+				{
+				}
+
+				try
+				{
+					d = ExifInfo.GetDouble(ExifDirectoryBase.TagExposureTime);
+					if (d.HasValue)
+					{
+						I.E = ExposureToStr(d.Value);
+					}
+				}
+				catch
+				{
+				}
+
+				try
+				{
+					i = ExifInfo.GetUInt16(ExifDirectoryBase.TagIsoEquivalent);
+					if (i != 0)
+					{
+						I.I = i.ToString();
+					}
+				}
+				catch
+				{
+				}
+
+				try
+				{
+					d = ExifInfo.GetDouble(ExifDirectoryBase.TagFNumber);
+					if (d.HasValue)
+					{
+						I.A = Math.Round((decimal) d.Value, 1).ToString(CultureInfo.InvariantCulture);
+					}
+				}
+				catch
+				{
+				}
+
+				try
+				{
+					d = ExifInfo.GetDouble(ExifDirectoryBase.TagFocalLength);
+					I.F = d.ToString();
+				}
+				catch
+				{
+				}
+
+				try
+				{
+					GeoLocation location = GpsInfo.GetGeoLocation();
+					I.La = location.Latitude.ToString(CultureInfo.InvariantCulture).Replace(',', '.');
+					I.Lo = location.Longitude.ToString(CultureInfo.InvariantCulture).Replace(',', '.');
+
+
+
+				}
+				catch
+				{
+				}
+
+				try
+				{
+					double Altitude = GpsInfo.GetDouble(GpsDirectory.TagAltitude);
+					byte isBelow = GpsInfo.GetByte(GpsDirectory.TagAltitudeRef);
+					if (isBelow != 0) Altitude = 0 - Altitude;
+					I.Al = Math.Round(Altitude,2).ToString(CultureInfo.InvariantCulture).Replace(',', '.');
+				}
+				catch
+				{
+				}
+			}
+			catch
+			{
+			}
+
+			;
+		}
 
 		private void ItemsListSetLargeIconsView(object sender, EventArgs e)
 		{
@@ -549,10 +569,10 @@ namespace PhotoAlbumMaker
 				string[] s = e.Data.GetData("FileDrop") as string[];
 				LoadNewImages(s);
 			}
-			else
-			if (e.Data.GetDataPresent(typeof(List<ImagesListViewItem>)))
+			else if (e.Data.GetDataPresent(typeof(List<ImagesListViewItem>)))
 			{
-				if (!(e.Data.GetData(typeof(List<ImagesListViewItem>)) is List<ImagesListViewItem> DroppedItems)) return;
+				if (!(e.Data.GetData(typeof(List<ImagesListViewItem>)) is List<ImagesListViewItem> DroppedItems)
+				) return;
 				int targetIndex = ImagesList.InsertionMark.Index;
 				if (targetIndex < 0) targetIndex = 0;
 
@@ -560,7 +580,7 @@ namespace PhotoAlbumMaker
 				{
 					int sourceIndex = ImagesList.Items.IndexOf(LI);
 					SelectedFolder.Im.RemoveAt(sourceIndex);
-					SelectedFolder.Im.Insert(targetIndex,LI.ImageData);
+					SelectedFolder.Im.Insert(targetIndex, LI.ImageData);
 					LI.Remove();
 					ImagesList.Items.Insert(targetIndex, LI);
 					++targetIndex;
@@ -585,8 +605,9 @@ namespace PhotoAlbumMaker
 				List<ImagesListViewItem> SelectedItems = new List<ImagesListViewItem>();
 				foreach (int index in ImagesList.SelectedIndices)
 				{
-					SelectedItems.Add((ImagesListViewItem)(ImagesList.Items[index]));
+					SelectedItems.Add((ImagesListViewItem) (ImagesList.Items[index]));
 				}
+
 				ImagesList.DoDragDrop(SelectedItems, DragDropEffects.Move);
 			}
 		}
@@ -594,7 +615,7 @@ namespace PhotoAlbumMaker
 		private void ImagesList_DragOver(object sender, DragEventArgs e)
 		{
 			Point targetPoint =
-		   ImagesList.PointToClient(new Point(e.X, e.Y));
+				ImagesList.PointToClient(new Point(e.X, e.Y));
 
 			int targetIndex = ImagesList.InsertionMark.NearestIndex(targetPoint);
 
@@ -613,27 +634,31 @@ namespace PhotoAlbumMaker
 			OpenImagesFilesDialog.InitialDirectory = ReadCfgString("LastImagesPath");
 			if (OpenImagesFilesDialog.ShowDialog() == DialogResult.OK)
 			{
-				SaveCfgData("LastImagesPath",Path.GetDirectoryName(OpenImagesFilesDialog.FileNames[0]));
+				SaveCfgData("LastImagesPath", Path.GetDirectoryName(OpenImagesFilesDialog.FileNames[0]));
 				Task task = new Task(() => LoadNewImages(OpenImagesFilesDialog.FileNames));
 				task.Start();
-			};
+			}
+
+			;
 		}
 
 		private void DeleteImagesMenuClick(object sender, EventArgs e)
 		{
 			if (ImagesList.SelectedItems.Count != 0)
 			{
-				if (MessageBox.Show("Delete selected images?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK) return;
+				if (MessageBox.Show("Delete selected images?", "", MessageBoxButtons.OKCancel,
+					MessageBoxIcon.Question) != DialogResult.OK) return;
 				foreach (ImagesListViewItem LI in ImagesList.SelectedItems)
 				{
-						SelectedFolder.Im.Remove(LI.ImageData);
-						ImagesList.Items.Remove(LI);
-						imageList1.Images.RemoveByKey(LI.ImageData.N);
-						File.Delete(PhotoAlbumPath + "\\" + SelectedFolderID.ToString() + "\\" + LI.ImageData.N);
-						File.Delete(PhotoAlbumPath + "\\" + SelectedFolderID.ToString() + "\\slides\\" + LI.ImageData.N);
-						File.Delete(PhotoAlbumPath + "\\" + SelectedFolderID.ToString() + "\\thumbs\\" + LI.ImageData.N);
+					SelectedFolder.Im.Remove(LI.ImageData);
+					ImagesList.Items.Remove(LI);
+					imageList1.Images.RemoveByKey(LI.ImageData.N);
+					File.Delete(PhotoAlbumPath + "\\" + SelectedFolderID.ToString() + "\\" + LI.ImageData.N);
+					File.Delete(PhotoAlbumPath + "\\" + SelectedFolderID.ToString() + "\\slides\\" + LI.ImageData.N);
+					File.Delete(PhotoAlbumPath + "\\" + SelectedFolderID.ToString() + "\\thumbs\\" + LI.ImageData.N);
 				}
 			}
+
 			SavePhotoAlbumData();
 		}
 
@@ -642,7 +667,7 @@ namespace PhotoAlbumMaker
 		{
 			if (ImagesList.SelectedItems.Count != 1) return;
 
-			string ThumbName = ((ImagesListViewItem)(ImagesList.SelectedItems[0])).ImageData.N;
+			string ThumbName = ((ImagesListViewItem) (ImagesList.SelectedItems[0])).ImageData.N;
 			using (SetFolderThumbDialog dlg = new SetFolderThumbDialog())
 			{
 				dlg.pictureBox1.Image = imageList1.Images[ThumbName];
@@ -657,7 +682,7 @@ namespace PhotoAlbumMaker
 
 				if (dlg.ShowDialog() == DialogResult.OK)
 				{
-					if (dlg.FoldersThumbCheckedListBox.CheckedItems.Count==0) return;
+					if (dlg.FoldersThumbCheckedListBox.CheckedItems.Count == 0) return;
 					foreach (FoldersThumbListItem LI1 in dlg.FoldersThumbCheckedListBox.CheckedItems)
 					{
 						FolderInfo F = _photoAlbumInfo.F.FirstOrDefault(p => p.I == LI1.ID);
@@ -667,6 +692,7 @@ namespace PhotoAlbumMaker
 							F.TN = ThumbName;
 						}
 					}
+
 					SavePhotoAlbumData();
 				}
 			}
@@ -681,7 +707,7 @@ namespace PhotoAlbumMaker
 			Text = "PhotoAlbum Maker : " + _photoAlbumInfo.N;
 			FoldersMenuItem.Enabled = true;
 			PhotoAlbumEditSettingsMenuItem.Enabled = true;
-			FoldersTreeNode RootNode = new FoldersTreeNode(new FolderInfo { I = 0, PI = 0, N = _photoAlbumInfo.N });
+			FoldersTreeNode RootNode = new FoldersTreeNode(new FolderInfo {I = 0, PI = 0, N = _photoAlbumInfo.N});
 			FoldersTree.Nodes.Clear();
 			FoldersTree.Nodes.Add(RootNode);
 			FillFoldersTree(RootNode);
@@ -703,7 +729,7 @@ namespace PhotoAlbumMaker
 
 		private void SaveFoldersTree()
 		{
-			FoldersTreeNode RootNode = (FoldersTreeNode)FoldersTree.Nodes[0];
+			FoldersTreeNode RootNode = (FoldersTreeNode) FoldersTree.Nodes[0];
 			_photoAlbumInfo.F.Clear();
 			UpdateFoldersTreeDB(RootNode);
 			SavePhotoAlbumData();
@@ -714,7 +740,7 @@ namespace PhotoAlbumMaker
 			foreach (FoldersTreeNode node in CurrentNode.Nodes)
 			{
 				_photoAlbumInfo.F.Add(node.F);
-				if (node.Nodes.Count>0) UpdateFoldersTreeDB(node);
+				if (node.Nodes.Count > 0) UpdateFoldersTreeDB(node);
 			}
 		}
 
@@ -732,8 +758,10 @@ namespace PhotoAlbumMaker
 		{
 			if (e.Data.GetDataPresent(typeof(FoldersTreeNode)))
 			{
-				FoldersTreeNode DraggedNode = (FoldersTreeNode)e.Data.GetData(typeof(FoldersTreeNode));
-				FoldersTreeNode DestNode = (FoldersTreeNode)((TreeView)sender).GetNodeAt(((TreeView)sender).PointToClient(new Point(e.X, e.Y)));
+				FoldersTreeNode DraggedNode = (FoldersTreeNode) e.Data.GetData(typeof(FoldersTreeNode));
+				FoldersTreeNode DestNode =
+					(FoldersTreeNode) ((TreeView) sender).GetNodeAt(
+						((TreeView) sender).PointToClient(new Point(e.X, e.Y)));
 				if (DestNode == DraggedNode) return;
 				if (DraggedNode.F.I == 0) return;
 				FoldersTreeNode node1 = DestNode;
@@ -741,7 +769,7 @@ namespace PhotoAlbumMaker
 				{
 					if (node1.F.PI == 0) break;
 					if (node1.F.PI == DraggedNode.F.I) return;
-					node1 = (FoldersTreeNode)node1.Parent;
+					node1 = (FoldersTreeNode) node1.Parent;
 				}
 
 				DraggedNode.F.PI = DestNode.F.PI;
@@ -757,13 +785,14 @@ namespace PhotoAlbumMaker
 					DraggedNode.Remove();
 					DestNode.Parent.Nodes.Insert(DestNode.Index, DraggedNode);
 				}
+
 				SaveFoldersTree();
 			}
 		}
 
 		private void NewFolderMenuClick(object sender, EventArgs e)
 		{
-			FoldersTreeNode tn = (FoldersTreeNode)FoldersTree.SelectedNode;
+			FoldersTreeNode tn = (FoldersTreeNode) FoldersTree.SelectedNode;
 			using (PhotoFolderPropertiesDialog dlg = new PhotoFolderPropertiesDialog())
 			{
 				dlg.Text = "New Folder";
@@ -787,15 +816,17 @@ namespace PhotoAlbumMaker
 
 		private void DeleteFolderMenuClick(object sender, EventArgs e)
 		{
-			FoldersTreeNode tn = (FoldersTreeNode)FoldersTree.SelectedNode;
+			FoldersTreeNode tn = (FoldersTreeNode) FoldersTree.SelectedNode;
 			if (tn.F.I == 0) return;
 			if (tn.Nodes.Count != 0)
 			{
-				MessageBox.Show("Cannot delete folder " + tn.Text + " - delete subfolders first", "Delete folder", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+				MessageBox.Show("Cannot delete folder " + tn.Text + " - delete subfolders first", "Delete folder",
+					MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				return;
 			}
 
-			if (MessageBox.Show("Delete folder " + tn.Text + "?", "Delete folder", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK) return;
+			if (MessageBox.Show("Delete folder " + tn.Text + "?", "Delete folder", MessageBoxButtons.OKCancel,
+				MessageBoxIcon.Question) != DialogResult.OK) return;
 
 			_photoAlbumInfo.F.Remove(tn.F);
 
@@ -804,7 +835,11 @@ namespace PhotoAlbumMaker
 			{
 				Directory.Delete(DirName, true);
 			}
-			catch { };
+			catch
+			{
+			}
+
+			;
 			tn.Remove();
 
 			SavePhotoAlbumData();
@@ -813,7 +848,7 @@ namespace PhotoAlbumMaker
 
 		private void RenameFolderMenuClick(object sender, EventArgs e)
 		{
-			FoldersTreeNode tn = (FoldersTreeNode)FoldersTree.SelectedNode;
+			FoldersTreeNode tn = (FoldersTreeNode) FoldersTree.SelectedNode;
 			if (tn.F.I == 0) return;
 			using (PhotoFolderPropertiesDialog dlg = new PhotoFolderPropertiesDialog())
 			{
@@ -833,7 +868,7 @@ namespace PhotoAlbumMaker
 
 		private void FoldersTree_AfterSelect(object sender, TreeViewEventArgs e)
 		{
-			LoadFolderItems(((FoldersTreeNode)(FoldersTree.SelectedNode)).F);
+			LoadFolderItems(((FoldersTreeNode) (FoldersTree.SelectedNode)).F);
 		}
 
 
@@ -933,7 +968,8 @@ namespace PhotoAlbumMaker
 						Rectangle rect = new Rectangle(0, 0, NewSizeX, NewSizeY);
 						g.DrawImage(OriginalImage, rect);
 
-						rect = new Rectangle((NewSizeX - _photoAlbumInfo.TS) / 2, (NewSizeY - _photoAlbumInfo.TS) / 2, _photoAlbumInfo.TS,
+						rect = new Rectangle((NewSizeX - _photoAlbumInfo.TS) / 2, (NewSizeY - _photoAlbumInfo.TS) / 2,
+							_photoAlbumInfo.TS,
 							_photoAlbumInfo.TS);
 						Bitmap ThumbImage = TmpImage.Clone(rect, TmpImage.PixelFormat);
 
@@ -966,7 +1002,8 @@ namespace PhotoAlbumMaker
 		{
 			try
 			{
-				if (File.Exists(PhotoAlbumPath + "\\Site.json")) File.Copy(PhotoAlbumPath + "\\Site.json", PhotoAlbumPath + "\\Site.json.bak", true);
+				if (File.Exists(PhotoAlbumPath + "\\Site.json"))
+					File.Copy(PhotoAlbumPath + "\\Site.json", PhotoAlbumPath + "\\Site.json.bak", true);
 
 				_photoAlbumInfo.TIC = 0;
 				_photoAlbumInfo.TVC = 0;
@@ -975,8 +1012,13 @@ namespace PhotoAlbumMaker
 					_photoAlbumInfo.TIC += _photoAlbumInfo.F[i].Im.Count;
 					_photoAlbumInfo.TVC += _photoAlbumInfo.F[i].V.Count;
 				}
+
 				_photoAlbumInfo.LC = DateTime.Now.ToShortDateString();
-				File.WriteAllText(PhotoAlbumPath + "\\Site.json", JsonConvert.SerializeObject(_photoAlbumInfo));
+				File.WriteAllText(PhotoAlbumPath + "\\Site.json", JsonConvert.SerializeObject(_photoAlbumInfo,
+					new JsonSerializerSettings
+					{
+						NullValueHandling = NullValueHandling.Ignore
+					}));
 			}
 			catch (Exception Ex)
 			{
@@ -988,25 +1030,25 @@ namespace PhotoAlbumMaker
 
 		private void EditSettingsMenuItem_Click(object sender, EventArgs e)
 		{
-			using (PhotoalbumSettingsDialog dlg = new PhotoalbumSettingsDialog(PhotoAlbumPath,_photoAlbumInfo))
+			using (PhotoalbumSettingsDialog dlg = new PhotoalbumSettingsDialog(PhotoAlbumPath, _photoAlbumInfo))
 			{
-				if (dlg.ShowDialog()!=DialogResult.OK) return;
+				if (dlg.ShowDialog() != DialogResult.OK) return;
 				_photoAlbumInfo.N = dlg.NameTextBox.Text;
 				_photoAlbumInfo.D = dlg.DescriptionTextBox.Text;
 				bool RebuildSlides = (_photoAlbumInfo.IS != dlg.SlidesSizeEdit.Value) ||
 				                     (_photoAlbumInfo.IQ != dlg.SlidesQualityEdit.Value);
-				bool RebuildThumbs= (_photoAlbumInfo.TS != dlg.ThumbsSizeEdit.Value) ||
-				                    (_photoAlbumInfo.TQ != dlg.ThumbsQualityEdit.Value);
+				bool RebuildThumbs = (_photoAlbumInfo.TS != dlg.ThumbsSizeEdit.Value) ||
+				                     (_photoAlbumInfo.TQ != dlg.ThumbsQualityEdit.Value);
 
-				_photoAlbumInfo.IS = (int)dlg.SlidesSizeEdit.Value;
-				_photoAlbumInfo.IQ = (byte)dlg.SlidesQualityEdit.Value;
-				_photoAlbumInfo.TS = (int)dlg.ThumbsSizeEdit.Value;
-				_photoAlbumInfo.TQ = (byte)dlg.ThumbsQualityEdit.Value;
+				_photoAlbumInfo.IS = (int) dlg.SlidesSizeEdit.Value;
+				_photoAlbumInfo.IQ = (byte) dlg.SlidesQualityEdit.Value;
+				_photoAlbumInfo.TS = (int) dlg.ThumbsSizeEdit.Value;
+				_photoAlbumInfo.TQ = (byte) dlg.ThumbsQualityEdit.Value;
 				SavePhotoAlbumData();
 
 				if (RebuildSlides || RebuildThumbs)
 				{
-					Task task = new Task(() => Rebuild(RebuildSlides,RebuildThumbs));
+					Task task = new Task(() => Rebuild(RebuildSlides, RebuildThumbs));
 					task.Start();
 				}
 			}
@@ -1025,7 +1067,7 @@ namespace PhotoAlbumMaker
 		private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
 		{
 			if (!LoadComplete) return;
-			SaveCfgData("FoldersWindowWidth",splitContainer1.SplitterDistance.ToString());
+			SaveCfgData("FoldersWindowWidth", splitContainer1.SplitterDistance.ToString());
 		}
 
 		private void splitContainer2_SplitterMoved(object sender, SplitterEventArgs e)
@@ -1038,15 +1080,15 @@ namespace PhotoAlbumMaker
 		{
 			if (!LoadComplete) return;
 
-			if (WindowState ==FormWindowState.Maximized)
+			if (WindowState == FormWindowState.Maximized)
 			{
-				SaveCfgData("Maximized","true");
+				SaveCfgData("Maximized", "true");
 			}
 			else
 			{
-				SaveCfgData("Maximized","false");
-				SaveCfgData("SizeX",Width.ToString());
-				SaveCfgData("SizeY",Height.ToString());
+				SaveCfgData("Maximized", "false");
+				SaveCfgData("SizeX", Width.ToString());
+				SaveCfgData("SizeY", Height.ToString());
 			}
 		}
 
@@ -1121,7 +1163,7 @@ namespace PhotoAlbumMaker
 
 		private void NewPhotoAlbumMenuClick(object sender, EventArgs e)
 		{
-			using (PhotoalbumSettingsDialog dlg = new PhotoalbumSettingsDialog(string.Empty,null))
+			using (PhotoalbumSettingsDialog dlg = new PhotoalbumSettingsDialog(string.Empty, null))
 			{
 				if (dlg.ShowDialog() != DialogResult.OK) return;
 				PhotoAlbumPath = dlg.PhotoAlbumPathTextBox.Text;
@@ -1138,7 +1180,7 @@ namespace PhotoAlbumMaker
 				try
 				{
 					Directory.CreateDirectory(PhotoAlbumPath + "\\Videos");
-					ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory+"Website.zip", PhotoAlbumPath);
+					ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + "Website.zip", PhotoAlbumPath);
 					SavePhotoAlbumData();
 				}
 				catch (Exception Ex)
@@ -1189,7 +1231,7 @@ namespace PhotoAlbumMaker
 				if (dlg.ShowDialog() != DialogResult.OK) return;
 				V.D = dlg.NameTextBox.Text;
 				((VideoListViewItem) (VideosList.SelectedItems[0])).Name = V.D;
-				((VideoListViewItem)(VideosList.SelectedItems[0])).Text = V.D;
+				((VideoListViewItem) (VideosList.SelectedItems[0])).Text = V.D;
 				SavePhotoAlbumData();
 			}
 		}
@@ -1198,14 +1240,16 @@ namespace PhotoAlbumMaker
 		{
 			if (VideosList.SelectedItems.Count != 0)
 			{
-				if (MessageBox.Show("Delete selected videos?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK) return;
+				if (MessageBox.Show("Delete selected videos?", "", MessageBoxButtons.OKCancel,
+					MessageBoxIcon.Question) != DialogResult.OK) return;
 				foreach (VideoListViewItem VI in VideosList.SelectedItems)
 				{
 					SelectedFolder.V.Remove(VI.V);
 					VideosList.Items.Remove(VI);
-					File.Delete(PhotoAlbumPath + "\\videos\\" +VI.V.N);
+					File.Delete(PhotoAlbumPath + "\\videos\\" + VI.V.N);
 				}
 			}
+
 			SavePhotoAlbumData();
 		}
 
@@ -1216,8 +1260,9 @@ namespace PhotoAlbumMaker
 				List<VideoListViewItem> SelectedItems = new List<VideoListViewItem>();
 				foreach (int index in VideosList.SelectedIndices)
 				{
-					SelectedItems.Add((VideoListViewItem)(VideosList.Items[index]));
+					SelectedItems.Add((VideoListViewItem) (VideosList.Items[index]));
 				}
+
 				VideosList.DoDragDrop(SelectedItems, DragDropEffects.Move);
 			}
 		}
@@ -1241,7 +1286,7 @@ namespace PhotoAlbumMaker
 		private void VideosContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			RenameVideoContextMenuItem.Enabled = (VideosList.SelectedItems.Count == 1);
-			DeleteVideoContextMenuItem.Enabled = (VideosList.SelectedItems.Count >0);
+			DeleteVideoContextMenuItem.Enabled = (VideosList.SelectedItems.Count > 0);
 		}
 
 		private void FoldersContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
@@ -1253,8 +1298,8 @@ namespace PhotoAlbumMaker
 		private void ImagesContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			DeleteImageContextMenuItem.Enabled = (ImagesList.SelectedItems.Count > 0);
-			SetAsFolderThumbContextMenuItem.Enabled= (ImagesList.SelectedItems.Count == 1);
-			EditImageDescriptionContextMenuItem.Enabled= (ImagesList.SelectedItems.Count == 1);
+			SetAsFolderThumbContextMenuItem.Enabled = (ImagesList.SelectedItems.Count == 1);
+			EditImageDescriptionContextMenuItem.Enabled = (ImagesList.SelectedItems.Count == 1);
 		}
 
 		private void AboutMenuItemClick(object sender, EventArgs e)
@@ -1263,6 +1308,40 @@ namespace PhotoAlbumMaker
 			{
 				AW.ShowDialog();
 			}
+		}
+
+		private void RescanExifMenuItem_Click(object sender, EventArgs e)
+		{
+			Task task = new Task(() => RescanExif());
+			task.Start();
+
+
+		}
+
+		private void RescanExif()
+		{
+			int ProcessedImages = 0;
+
+
+			toolStripProgressBar1.Value = 0;
+			toolStripProgressBar1.Maximum = _photoAlbumInfo.TIC;
+
+			foreach (FolderInfo F in _photoAlbumInfo.F)
+			{
+				string DirName = PhotoAlbumPath + "\\" + F.I.ToString();
+
+				for (int i = 0; i < F.Im.Count(); i++)
+				{
+					ImageInfo I = F.Im[i];
+					string OriginalName = DirName + "\\" + F.Im[i].N;
+					GetExifInfo(ref I, OriginalName);
+					F.Im[i] = I;
+					++ProcessedImages;
+					toolStripProgressBar1.Value = ProcessedImages;
+					toolStripStatusLabel2.Text = ProcessedImages.ToString() + "/" + _photoAlbumInfo.TIC.ToString();
+				}
+			}
+			SavePhotoAlbumData();
 		}
 	}
 }

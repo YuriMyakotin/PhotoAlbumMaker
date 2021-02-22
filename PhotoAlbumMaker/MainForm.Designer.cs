@@ -39,8 +39,6 @@
 			this.ImagesList = new System.Windows.Forms.ListView();
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.ImagesContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.AddImageContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.DeleteImageContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -93,6 +91,16 @@
 			this.DeleteVideoContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+			this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader13 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader14 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader15 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.RescanExifMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.FoldersContextMenu.SuspendLayout();
 			this.ImagesContextMenu.SuspendLayout();
 			this.StatusBarStrip.SuspendLayout();
@@ -125,7 +133,7 @@
 			this.FoldersTree.LabelEdit = true;
 			this.FoldersTree.Location = new System.Drawing.Point(0, 0);
 			this.FoldersTree.Name = "FoldersTree";
-			this.FoldersTree.Size = new System.Drawing.Size(303, 702);
+			this.FoldersTree.Size = new System.Drawing.Size(303, 695);
 			this.FoldersTree.TabIndex = 1;
 			this.FoldersTree.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.Folders_ItemDrag);
 			this.FoldersTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.FoldersTree_AfterSelect);
@@ -173,8 +181,15 @@
 			this.ImagesList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader6,
-            this.columnHeader2,
-            this.columnHeader3});
+            this.columnHeader7,
+            this.columnHeader8,
+            this.columnHeader9,
+            this.columnHeader10,
+            this.columnHeader11,
+            this.columnHeader12,
+            this.columnHeader13,
+            this.columnHeader14,
+            this.columnHeader15});
 			this.ImagesList.ContextMenuStrip = this.ImagesContextMenu;
 			this.ImagesList.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ImagesList.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -185,7 +200,7 @@
 			this.ImagesList.Name = "ImagesList";
 			this.ImagesList.ShowGroups = false;
 			this.ImagesList.ShowItemToolTips = true;
-			this.ImagesList.Size = new System.Drawing.Size(975, 459);
+			this.ImagesList.Size = new System.Drawing.Size(975, 452);
 			this.ImagesList.SmallImageList = this.imageList1;
 			this.ImagesList.TabIndex = 5;
 			this.ImagesList.TileSize = new System.Drawing.Size(36, 36);
@@ -206,18 +221,6 @@
 			// 
 			this.columnHeader6.Text = "Comments";
 			this.columnHeader6.Width = 150;
-			// 
-			// columnHeader2
-			// 
-			this.columnHeader2.Text = "Exif";
-			this.columnHeader2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.columnHeader2.Width = 180;
-			// 
-			// columnHeader3
-			// 
-			this.columnHeader3.Text = "Geotag";
-			this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.columnHeader3.Width = 130;
 			// 
 			// ImagesContextMenu
 			// 
@@ -316,25 +319,24 @@
 			this.StatusBarStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripProgressBar1,
             this.toolStripStatusLabel2});
-			this.StatusBarStrip.Location = new System.Drawing.Point(0, 742);
+			this.StatusBarStrip.Location = new System.Drawing.Point(0, 735);
 			this.StatusBarStrip.Name = "StatusBarStrip";
-			this.StatusBarStrip.Size = new System.Drawing.Size(1282, 31);
+			this.StatusBarStrip.Size = new System.Drawing.Size(1282, 38);
 			this.StatusBarStrip.TabIndex = 6;
 			this.StatusBarStrip.Text = "statusStrip1";
 			// 
 			// toolStripProgressBar1
 			// 
 			this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-			this.toolStripProgressBar1.Size = new System.Drawing.Size(200, 19);
+			this.toolStripProgressBar1.Size = new System.Drawing.Size(200, 26);
 			// 
 			// toolStripStatusLabel2
 			// 
 			this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-			this.toolStripStatusLabel2.Size = new System.Drawing.Size(0, 21);
+			this.toolStripStatusLabel2.Size = new System.Drawing.Size(0, 28);
 			// 
 			// _MainMenuStrip
 			// 
-			this._MainMenuStrip.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
 			this._MainMenuStrip.ImageScalingSize = new System.Drawing.Size(32, 32);
 			this._MainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.siteToolStripMenuItem,
@@ -353,6 +355,7 @@
             this.newToolStripMenuItem1,
             this.openToolStripMenuItem,
             this.PhotoAlbumEditSettingsMenuItem,
+            this.RescanExifMenuItem,
             this.toolStripSeparator6,
             this.aboutToolStripMenuItem,
             this.toolStripSeparator3,
@@ -364,45 +367,45 @@
 			// newToolStripMenuItem1
 			// 
 			this.newToolStripMenuItem1.Name = "newToolStripMenuItem1";
-			this.newToolStripMenuItem1.Size = new System.Drawing.Size(279, 44);
+			this.newToolStripMenuItem1.Size = new System.Drawing.Size(359, 44);
 			this.newToolStripMenuItem1.Text = "New";
 			this.newToolStripMenuItem1.Click += new System.EventHandler(this.NewPhotoAlbumMenuClick);
 			// 
 			// openToolStripMenuItem
 			// 
 			this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-			this.openToolStripMenuItem.Size = new System.Drawing.Size(279, 44);
+			this.openToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
 			this.openToolStripMenuItem.Text = "Open";
 			this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenMenuItem_Click);
 			// 
 			// PhotoAlbumEditSettingsMenuItem
 			// 
 			this.PhotoAlbumEditSettingsMenuItem.Name = "PhotoAlbumEditSettingsMenuItem";
-			this.PhotoAlbumEditSettingsMenuItem.Size = new System.Drawing.Size(279, 44);
+			this.PhotoAlbumEditSettingsMenuItem.Size = new System.Drawing.Size(359, 44);
 			this.PhotoAlbumEditSettingsMenuItem.Text = "Edit settings";
 			this.PhotoAlbumEditSettingsMenuItem.Click += new System.EventHandler(this.EditSettingsMenuItem_Click);
 			// 
 			// toolStripSeparator6
 			// 
 			this.toolStripSeparator6.Name = "toolStripSeparator6";
-			this.toolStripSeparator6.Size = new System.Drawing.Size(276, 6);
+			this.toolStripSeparator6.Size = new System.Drawing.Size(356, 6);
 			// 
 			// aboutToolStripMenuItem
 			// 
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(279, 44);
+			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
 			this.aboutToolStripMenuItem.Text = "About";
 			this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutMenuItemClick);
 			// 
 			// toolStripSeparator3
 			// 
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.toolStripSeparator3.Size = new System.Drawing.Size(276, 6);
+			this.toolStripSeparator3.Size = new System.Drawing.Size(356, 6);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-			this.exitToolStripMenuItem.Size = new System.Drawing.Size(279, 44);
+			this.exitToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
 			this.exitToolStripMenuItem.Text = "Exit";
 			this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
 			// 
@@ -635,7 +638,7 @@
 			// splitContainer1.Panel2
 			// 
 			this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-			this.splitContainer1.Size = new System.Drawing.Size(1282, 702);
+			this.splitContainer1.Size = new System.Drawing.Size(1282, 695);
 			this.splitContainer1.SplitterDistance = 303;
 			this.splitContainer1.TabIndex = 9;
 			this.splitContainer1.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer1_SplitterMoved);
@@ -655,10 +658,53 @@
 			// splitContainer2.Panel2
 			// 
 			this.splitContainer2.Panel2.Controls.Add(this.VideosList);
-			this.splitContainer2.Size = new System.Drawing.Size(975, 702);
-			this.splitContainer2.SplitterDistance = 459;
+			this.splitContainer2.Size = new System.Drawing.Size(975, 695);
+			this.splitContainer2.SplitterDistance = 452;
 			this.splitContainer2.TabIndex = 0;
 			this.splitContainer2.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer2_SplitterMoved);
+			// 
+			// columnHeader7
+			// 
+			this.columnHeader7.Text = "Date & Time";
+			// 
+			// columnHeader8
+			// 
+			this.columnHeader8.Text = "Camera";
+			// 
+			// columnHeader9
+			// 
+			this.columnHeader9.Text = "ISO";
+			// 
+			// columnHeader10
+			// 
+			this.columnHeader10.Text = "Exposure";
+			// 
+			// columnHeader11
+			// 
+			this.columnHeader11.Text = "Aperture";
+			// 
+			// columnHeader12
+			// 
+			this.columnHeader12.Text = "Focal length";
+			// 
+			// columnHeader13
+			// 
+			this.columnHeader13.Text = "GPS latitude";
+			// 
+			// columnHeader14
+			// 
+			this.columnHeader14.Text = "GPS Longitude";
+			// 
+			// columnHeader15
+			// 
+			this.columnHeader15.Text = "GPS Altitude";
+			// 
+			// RescanExifMenuItem
+			// 
+			this.RescanExifMenuItem.Name = "RescanExifMenuItem";
+			this.RescanExifMenuItem.Size = new System.Drawing.Size(359, 44);
+			this.RescanExifMenuItem.Text = "Rescan Exif";
+			this.RescanExifMenuItem.Click += new System.EventHandler(this.RescanExifMenuItem_Click);
 			// 
 			// MainForm
 			// 
@@ -700,8 +746,6 @@
 		private System.Windows.Forms.TreeView FoldersTree;
 		private System.Windows.Forms.ImageList imageList1;
 		private System.Windows.Forms.ColumnHeader columnHeader1;
-		private System.Windows.Forms.ColumnHeader columnHeader2;
-		private System.Windows.Forms.ColumnHeader columnHeader3;
 		private System.Windows.Forms.StatusStrip StatusBarStrip;
 		private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
@@ -759,6 +803,16 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
 		private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+		private System.Windows.Forms.ColumnHeader columnHeader7;
+		private System.Windows.Forms.ColumnHeader columnHeader8;
+		private System.Windows.Forms.ColumnHeader columnHeader9;
+		private System.Windows.Forms.ColumnHeader columnHeader10;
+		private System.Windows.Forms.ColumnHeader columnHeader11;
+		private System.Windows.Forms.ColumnHeader columnHeader12;
+		private System.Windows.Forms.ColumnHeader columnHeader13;
+		private System.Windows.Forms.ColumnHeader columnHeader14;
+		private System.Windows.Forms.ColumnHeader columnHeader15;
+		private System.Windows.Forms.ToolStripMenuItem RescanExifMenuItem;
 	}
 }
 

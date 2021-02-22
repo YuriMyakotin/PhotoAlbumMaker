@@ -46,10 +46,10 @@
 			this.linkLabel3 = new System.Windows.Forms.LinkLabel();
 			this.linkLabel4 = new System.Windows.Forms.LinkLabel();
 			this.linkLabel5 = new System.Windows.Forms.LinkLabel();
-			this.OkBtn = new System.Windows.Forms.Button();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.label8 = new System.Windows.Forms.Label();
 			this.linkLabel6 = new System.Windows.Forms.LinkLabel();
+			this.OkBtn = new System.Windows.Forms.Button();
 			this.tableLayoutPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -76,7 +76,7 @@
 			this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel.Size = new System.Drawing.Size(813, 247);
+			this.tableLayoutPanel.Size = new System.Drawing.Size(813, 278);
 			this.tableLayoutPanel.TabIndex = 0;
 			// 
 			// logoPictureBox
@@ -87,7 +87,7 @@
 			this.logoPictureBox.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
 			this.logoPictureBox.Name = "logoPictureBox";
 			this.tableLayoutPanel.SetRowSpan(this.logoPictureBox, 5);
-			this.logoPictureBox.Size = new System.Drawing.Size(244, 233);
+			this.logoPictureBox.Size = new System.Drawing.Size(244, 264);
 			this.logoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.logoPictureBox.TabIndex = 12;
 			this.logoPictureBox.TabStop = false;
@@ -159,7 +159,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(551, 145);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(551, 176);
 			this.tableLayoutPanel1.TabIndex = 25;
 			// 
 			// label1
@@ -193,7 +193,7 @@
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(182, 24);
 			this.label3.TabIndex = 2;
-			this.label3.Text = "ExifLib";
+			this.label3.Text = "metadata-extractor-dotnet";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label4
@@ -236,7 +236,7 @@
 			this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.label7.Location = new System.Drawing.Point(3, 144);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(182, 24);
+			this.label7.Size = new System.Drawing.Size(182, 32);
 			this.label7.TabIndex = 6;
 			this.label7.Text = "Fancybox";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -248,7 +248,7 @@
 			this.linkLabel1.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.linkLabel1.Location = new System.Drawing.Point(191, 24);
 			this.linkLabel1.Name = "linkLabel1";
-			this.linkLabel1.Size = new System.Drawing.Size(360, 24);
+			this.linkLabel1.Size = new System.Drawing.Size(482, 24);
 			this.linkLabel1.TabIndex = 7;
 			this.linkLabel1.TabStop = true;
 			this.linkLabel1.Text = "https://www.newtonsoft.com/json";
@@ -262,11 +262,10 @@
 			this.linkLabel2.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.linkLabel2.Location = new System.Drawing.Point(191, 48);
 			this.linkLabel2.Name = "linkLabel2";
-			this.linkLabel2.Size = new System.Drawing.Size(360, 24);
+			this.linkLabel2.Size = new System.Drawing.Size(482, 24);
 			this.linkLabel2.TabIndex = 8;
 			this.linkLabel2.TabStop = true;
-			this.linkLabel2.Text = "https://www.codeproject.com/Articles/36342/ExifLib-A-Fast-Exif-Data-Extractor-for" +
-    "-NET";
+			this.linkLabel2.Text = "https://github.com/drewnoakes/metadata-extractor-dotnet";
 			this.linkLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkClicked);
 			// 
@@ -277,7 +276,7 @@
 			this.linkLabel3.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.linkLabel3.Location = new System.Drawing.Point(191, 96);
 			this.linkLabel3.Name = "linkLabel3";
-			this.linkLabel3.Size = new System.Drawing.Size(360, 24);
+			this.linkLabel3.Size = new System.Drawing.Size(482, 24);
 			this.linkLabel3.TabIndex = 9;
 			this.linkLabel3.TabStop = true;
 			this.linkLabel3.Text = "https://jquery.com/";
@@ -291,7 +290,7 @@
 			this.linkLabel4.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.linkLabel4.Location = new System.Drawing.Point(191, 120);
 			this.linkLabel4.Name = "linkLabel4";
-			this.linkLabel4.Size = new System.Drawing.Size(360, 24);
+			this.linkLabel4.Size = new System.Drawing.Size(482, 24);
 			this.linkLabel4.TabIndex = 10;
 			this.linkLabel4.TabStop = true;
 			this.linkLabel4.Text = "https://masonry.desandro.com/";
@@ -305,22 +304,12 @@
 			this.linkLabel5.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.linkLabel5.Location = new System.Drawing.Point(191, 144);
 			this.linkLabel5.Name = "linkLabel5";
-			this.linkLabel5.Size = new System.Drawing.Size(360, 24);
+			this.linkLabel5.Size = new System.Drawing.Size(482, 32);
 			this.linkLabel5.TabIndex = 11;
 			this.linkLabel5.TabStop = true;
 			this.linkLabel5.Text = "https://fancyapps.com/fancybox/3/";
 			this.linkLabel5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.linkLabel5.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkClicked);
-			// 
-			// OkBtn
-			// 
-			this.OkBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.OkBtn.Location = new System.Drawing.Point(746, 264);
-			this.OkBtn.Name = "OkBtn";
-			this.OkBtn.Size = new System.Drawing.Size(72, 24);
-			this.OkBtn.TabIndex = 12;
-			this.OkBtn.Text = "Close";
-			this.OkBtn.UseVisualStyleBackColor = true;
 			// 
 			// flowLayoutPanel1
 			// 
@@ -354,11 +343,21 @@
 			this.linkLabel6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.linkLabel6.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkClicked);
 			// 
+			// OkBtn
+			// 
+			this.OkBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.OkBtn.Location = new System.Drawing.Point(746, 306);
+			this.OkBtn.Name = "OkBtn";
+			this.OkBtn.Size = new System.Drawing.Size(72, 24);
+			this.OkBtn.TabIndex = 12;
+			this.OkBtn.Text = "Close";
+			this.OkBtn.UseVisualStyleBackColor = true;
+			// 
 			// AboutWindow
 			// 
 			this.AcceptButton = this.OkBtn;
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(822, 307);
+			this.ClientSize = new System.Drawing.Size(822, 342);
 			this.ControlBox = false;
 			this.Controls.Add(this.tableLayoutPanel);
 			this.Controls.Add(this.OkBtn);

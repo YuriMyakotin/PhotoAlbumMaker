@@ -8,8 +8,15 @@ namespace PhotoAlbumMaker
     {
         public string N { get; set; } //name
         public string C { get; set; } //comments
-        public string E { get; set; } //exif
-        public string G { get; set; } //gps coords
+        public string D { get; set; } //date-time
+        public string Cn { get; set; } //camera name
+        public string I { get; set; } //iso
+        public string F { get; set; } //focal length
+        public string E { get; set; } //exposure
+        public string A { get; set; } //aperture
+        public string La { get; set; } //gps latitude
+        public string Lo { get; set; } //gps longitude
+        public string Al { get; set; } //gps altitude
     }
 
     public class VideoInfo
