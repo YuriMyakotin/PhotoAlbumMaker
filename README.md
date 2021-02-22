@@ -1,9 +1,9 @@
 # PhotoAlbum Maker
 Simple, but powerful editor and web engine for creating web photo/video albums. 
 
-<b>System requirements:</b> Windows, .Net framework 4.7.2 or later
+<b>System requirements:</b> Windows, .Net framework 4.8
 
-<b>3rd party components used:</b> Newtonsoft.JSON and ExifLib
+<b>3rd party components used:</b> Newtonsoft.JSON and MetaDataExtractor
 
 <b>Website requirements:</b> any operating system, any web server. 
 
