@@ -1,7 +1,7 @@
 # PhotoAlbum Maker
 Simple, but powerful editor and web engine for creating web photo/video albums. 
 
-This version is obsollete. Use <a href=https://github.com/YuriMyakotin/PhotoAlbumMaker-v2">https://github.com/YuriMyakotin/PhotoAlbumMaker-v2</a> instead.
+This version is obsollete. Use <a href="https://github.com/YuriMyakotin/PhotoAlbumMaker-v2">https://github.com/YuriMyakotin/PhotoAlbumMaker-v2</a> instead.
 
 <b>System requirements:</b> Windows, .Net framework 4.8
 
